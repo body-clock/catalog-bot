@@ -12,29 +12,31 @@ client = Twitter::REST::Client.new do |config|
 end
 
 sparql = SPARQL::Client.new("https://sdbm.library.upenn.edu/sparql/sdbm/query")
-sdbm = RDF::Vocabulary.new "https://sdbm.library.upenn.edu/"
 
-# query = sparql.select(:source).
-#   where(
-#   [:source, RDF.type, sdbm[:sources]],
-#   [sdbm[:sources_date], RDF.value, :sources_date]
-#   ).limit(10)
+time = Time.new
+month = time.month
+day = time.day
+month_day = sprintf "%02d%02d", month, day
 
-query2 = "
+regex = 
+
+
+query = %Q[
   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
   PREFIX sdbm: <https://sdbm.library.upenn.edu/>
 
   SELECT ?source ?source_date ?source_type WHERE {
-    #VALUES ?source_type {<https://sdbm.library.upenn.edu/source_types/1>} .
     ?source a sdbm:sources ;
-      sdbm:sources_date ?source_date.
+    sdbm:sources_date ?source_date.
+
+    FILTER regex(?source_date,  "\\\\d{4,4}#{month_day}")
   }
-"
+]
 
-puts query2
+puts query
 
-sparql.query(query2).each_solution do |solution|
-  puts solution[:source]
-  puts solution[:source_date]
-end
+# sparql.query(query).each_solution do |solution|
+#   puts solution[:source]
+#   puts solution[:source_date]
+# end
 

@@ -35,8 +35,8 @@ query = %Q[
 
 puts query
 
-# sparql.query(query).each_solution do |solution|
-#   puts solution[:source]
-#   puts solution[:source_date]
-# end
+sparql.query(query).each_solution do |solution|
+  puts solution[:source]
+  puts solution[:source_date]
+end
 

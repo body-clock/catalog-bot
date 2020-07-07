@@ -29,21 +29,34 @@ query = %Q[
     sdbm:sources_title ?source_title .
 
     FILTER regex(?source_date,  "\\\\d{4,4}#{month_day}")
+    FILTER (?source_title!="Provenance update")
   }
 ]
+
+def trim_title title, tweet, max_length = 270 
+  # get the length of the tweet
+  # remove words from the title until the length of the tweet is less that the max_length
+  tweet_length = tweet.length
+  title_array = title.split
+  while tweet_length > max_length
+    title_array.pop
+  end
+end
 
 sources = []
 sparql.query(query).each_solution do |solution|
   data = {}
-  data[:title] = "#{solution[:source_title]}"
-  data[:link] = "#{solution[:source]}"
-  
-  data[:date] = Date.parse("#{solution[:source_date]}")
+  data[:title] = solution[:source_title].to_s
+  data[:link] = solution[:source].to_s
+  data[:date] = Date.parse(solution[:source_date].to_s)
   sources << data
 end
 
 random_source = sources[rand(0..sources.length)]
 
-tweet = "Check out #{random_source[:title]} released on #{random_source[:date]}! #{random_source[:link]}"
+date = random_source[:date].strftime("%A, %B %-d, %Y")
+
+#TODO: make sure tweet isn't too long
+tweet = "Check out '#{random_source[:title]}' released on #{date}! #{random_source[:link]}"
 puts tweet
 #client.update(tweet)

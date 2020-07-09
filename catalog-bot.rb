@@ -4,6 +4,7 @@ require "twitter"
 require "rdf"
 require "sparql/client"
 require "date"
+require "pry"
 
 client = Twitter::REST::Client.new do |config|
   config.consumer_key = ENV["CONSUMER_KEY"]
@@ -33,14 +34,15 @@ query = %Q[
   }
 ]
 
-def trim_title title, tweet, max_length = 270 
-  # get the length of the tweet
-  # remove words from the title until the length of the tweet is less that the max_length
-  tweet_length = tweet.length
-  title_array = title.split
-  while tweet_length > max_length
+def trim_title title, max_length = 165
+  title_length = title.length
+  while title_length > max_length
+    title_array = title.split
     title_array.pop
+    title = title_array.join " " 
+    title_length = title.length
   end
+  title + '...'
 end
 
 sources = []
@@ -53,10 +55,22 @@ sparql.query(query).each_solution do |solution|
 end
 
 random_source = sources[rand(0..sources.length)]
+# random_source = {
+#   :title => "This is definitely too long of a title. I'm actually really surprised that we can't find one naturally. It must be that none exists on today's date. It actually has to be even longer, because the function isn't even shortening the title. That's because the title was too short previously. Now, with all this extra text on the end, it sholdn't be too short.",
+#   :link => "https://sdbm.library.upenn.edu/sources/10277",
+#   :date => Date.parse("20200909")
+# }
 
 date = random_source[:date].strftime("%A, %B %-d, %Y")
 
-#TODO: make sure tweet isn't too long
-tweet = "Check out '#{random_source[:title]}' released on #{date}! #{random_source[:link]}"
+if random_source[:title].length >=165
+  title = trim_title(random_source[:title])
+else
+  title = random_source[:title]
+end
+
+tweet = "Check out '#{title}' released on #{date}! #{random_source[:link]}"
+
 puts tweet
+puts tweet.length
 #client.update(tweet)

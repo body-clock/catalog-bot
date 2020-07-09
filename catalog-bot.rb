@@ -35,12 +35,13 @@ query = %Q[
 ]
 
 def trim_title title, max_length = 165
+  return title if title.length <= max_length
   title_length = title.length
   while title_length > max_length
     title_array = title.split
     title_array.pop
     title = title_array.join " " 
-    title_length = title.length
+    title_length = title.length + 3
   end
   title + '...'
 end
@@ -63,11 +64,7 @@ random_source = sources[rand(0..sources.length)]
 
 date = random_source[:date].strftime("%A, %B %-d, %Y")
 
-if random_source[:title].length >=165
-  title = trim_title(random_source[:title])
-else
-  title = random_source[:title]
-end
+title = trim_title(random_source[:title])
 
 tweet = "Check out '#{title}' released on #{date}! #{random_source[:link]}"
 

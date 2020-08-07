@@ -69,5 +69,4 @@ title = trim_title(random_source[:title])
 tweet = "Check out '#{title}' from #{date}! #{random_source[:link]}"
 
 puts tweet
-puts tweet.length
-#client.update(tweet)
+client.update(tweet)

@@ -34,7 +34,7 @@ query = %Q[
   }
 ]
 
-def trim_title title, max_length = 165
+def trim_title title, max_length = 50 
   return title if title.length <= max_length
   title_length = title.length
   while title_length > max_length
@@ -61,7 +61,7 @@ date = random_source[:date].strftime("%B %-d, %Y")
 
 title = trim_title(random_source[:title])
 
-tweet = "This sale occurred #OnThisDay, #{date}. Follow this link to see what manuscripts were sold and where they went: #{random_source[:link]} #provenance #manuscripts #wherearetheynow"
+tweet = "The sale of '#{title}' occurred #OnThisDay, #{date}. Follow this link to see what manuscripts were sold and where they went: #{random_source[:link]} #provenance #manuscripts #wherearetheynow @sims_mss"
 
 puts tweet
 client.update(tweet)

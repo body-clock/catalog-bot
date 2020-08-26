@@ -57,11 +57,11 @@ end
 
 random_source = sources[rand(0..sources.length)]
 
-date = random_source[:date].strftime("%A, %B %-d, %Y")
+date = random_source[:date].strftime("%B %-d, %Y")
 
 title = trim_title(random_source[:title])
 
-tweet = "This sale occurred #OnThisDay, #{date}. Follow this link to see what manuscripts were sold and where they went. #{random_source[:link]} #provenance #manuscripts #wherearetheynow"
+tweet = "This sale occurred #OnThisDay, #{date}. Follow this link to see what manuscripts were sold and where they went: #{random_source[:link]} #provenance #manuscripts #wherearetheynow"
 
 puts tweet
 client.update(tweet)

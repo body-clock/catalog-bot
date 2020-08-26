@@ -56,17 +56,12 @@ sparql.query(query).each_solution do |solution|
 end
 
 random_source = sources[rand(0..sources.length)]
-# random_source = {
-#   :title => "This is definitely too long of a title. I'm actually really surprised that we can't find one naturally. It must be that none exists on today's date. It actually has to be even longer, because the function isn't even shortening the title. That's because the title was too short previously. Now, with all this extra text on the end, it sholdn't be too short.",
-#   :link => "https://sdbm.library.upenn.edu/sources/10277",
-#   :date => Date.parse("20200909")
-# }
 
 date = random_source[:date].strftime("%A, %B %-d, %Y")
 
 title = trim_title(random_source[:title])
 
-tweet = "Check out '#{title}' from #{date}! #{random_source[:link]}"
+tweet = "This sale occurred #OnThisDay, #{date}. Follow this link to see what manuscripts were sold and where they went #{random_source[:link]}. #provenance #manuscripts #wherearetheynow"
 
 puts tweet
 client.update(tweet)

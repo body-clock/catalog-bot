@@ -31,6 +31,7 @@ query = %Q[
 
     FILTER regex(?source_date,  "\\\\d{4,4}#{month_day}")
     FILTER (?source_title!="Provenance update")
+    FILTER (?source_type_id=<https://sdbm.library.upenn.edu/source_types/1>)
   }
 ]
 
